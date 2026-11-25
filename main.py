@@ -14,13 +14,14 @@ def allowed(body):
 
 
 def pipeline():
-    body = open("entry.txt", encoding="utf-8").read().strip()
+    src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "entry.txt")
+    body = open(src, encoding="utf-8").read().strip()
     if not allowed(body):
         return {"gate": "invalid"}
     dest_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "out"
     if not os.path.isdir(dest_dir):
         os.makedirs(dest_dir)
-    shutil.copyfile("entry.txt", os.path.join(dest_dir, "entry.txt"))
+    shutil.copyfile(src, os.path.join(dest_dir, "entry.txt"))
     return {"gate": "valid", "digits": len(body), "seq": SEQ, "ceiling": CEILING}
 
 
